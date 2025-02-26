@@ -1,0 +1,258 @@
+openapi: 3.0.3
+info:
+  title: Travel Booking API
+  description: API for managing travel bookings
+  version: 1.0.0
+
+servers:
+  - url: https://api.travelagency.com/v1
+    description: Production server
+
+paths:
+  /holidays:
+    get:
+      summary: Get a list of available holidays
+      responses:
+        "200":
+          description: Successfully retrieved holidays
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    holiday_id:
+                      type: integer
+                      example: 123
+                    destination:
+                      type: string
+                      example: "Hawaii"
+                    price:
+                      type: number
+                      format: float
+                      example: 1500.00
+
+  /holidays/{holiday_id}:
+    get:
+      summary: Get details of a specific holiday
+      parameters:
+        - name: holiday_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Holiday details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  holiday_id:
+                    type: integer
+                    example: 123
+                  destination:
+                    type: string
+                    example: "Hawaii"
+                  price:
+                    type: number
+                    format: float
+                    example: 1500.00
+
+  /bookings:
+    post:
+      summary: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_name:
+                  type: string
+                  example: "John Doe"
+                customer_age:
+                  type: integer
+                  example: 25
+                holiday_id:
+                  type: integer
+                  example: 123
+                travel_option:
+                  type: string
+                  enum: ["car_self", "car_rental", "airplane"]
+                  example: "airplane"
+                travel_type:
+                  type: string
+                  enum: ["solo", "group"]
+                  example: "group"
+                group_size:
+                  type: integer
+                  example: 3
+                group_ages:
+                  type: array
+                  items:
+                    type: integer
+                  example: [25, 30, 17]
+      responses:
+        "201":
+          description: Booking successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  booking_id:
+                    type: integer
+                    example: 456
+                  message:
+                    type: string
+                    example: "Booking successfully created"
+
+  /bookings/{booking_id}:
+    get:
+      summary: Retrieve booking details
+      parameters:
+        - name: booking_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Booking details retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  booking_id:
+                    type: integer
+                    example: 456
+                  customer_name:
+                    type: string
+                    example: "John Doe"
+                  holiday_id:
+                    type: integer
+                    example: 123
+                  travel_option:
+                    type: string
+                    example: "airplane"
+                  travel_type:
+                    type: string
+                    example: "group"
+                  group_size:
+                    type: integer
+                    example: 3
+
+    put:
+      summary: Modify an existing booking
+      parameters:
+        - name: booking_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                travel_option:
+                  type: string
+                  enum: ["car_self", "car_rental", "airplane"]
+                  example: "rental"
+                travel_type:
+                  type: string
+                  enum: ["solo", "group"]
+                  example: "group"
+                group_size:
+                  type: integer
+                  example: 4
+                group_ages:
+                  type: array
+                  items:
+                    type: integer
+                  example: [25, 30, 18]
+      responses:
+        "200":
+          description: Booking successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Booking updated successfully"
+
+    delete:
+      summary: Cancel a booking
+      parameters:
+        - name: booking_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Booking successfully canceled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Booking canceled successfully"
+
+  /payments:
+    post:
+      summary: Process a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookingId:
+                  type: string
+                amount:
+                  type: number
+                paymentMethod:
+                  type: string
+      responses:
+        '200':
+          description: Payment processed successfully
+
+  /customers:
+    get:
+      summary: Get all customers
+      responses:
+        '200':
+          description: List of customers
+    post:
+      summary: Add a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                age:
+                  type: integer
+      responses:
+        '201':
+          description: Customer added successfully
