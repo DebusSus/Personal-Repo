@@ -1,0 +1,91 @@
+class Library():
+    def __init__(self):
+        self.books = []
+        self.members = []
+
+    def add_member(self, name):
+        print("\nA member has joined!")
+        self.members.append(name)
+
+    def add_book(self, name):
+        self.books.append(name)
+
+    def list_books(self):
+        print("\nAll books: ")
+        for book in self.books:
+            print(book.name)
+
+    def list_members(self):
+        print("\nAll members: ")
+        for member in self.members:
+            print(member.name)
+
+    def borrow(self, book, members):
+        if book.borrowed == True:
+            print("\nSorry,", members.name, ", ", book.name, "is not available right now")
+        elif book in self.books and members in self.members and book.borrowed == False:
+            print("\n")
+            print(book.name, "has been borrowed by", members.name)
+            self.books.remove(book)
+            book.borrowed = True                  
+
+
+    def unborrow(self, book, members):
+        if book.borrowed == False:
+            print("\nSorry,", book.name, "has already been returned")
+        elif book not in self.books and members in self.members and book.borrowed == True:
+            print("\n")
+            print(book.name, "has been returned by", members.name)
+            self.books.append(book)
+            book.borrowed = False                                                     
+
+
+
+class Book():
+    def __init__(self, name, borrowed):
+        self.name = name
+        self.borrowed = False
+
+
+class Person():
+    def __init__(self, name):
+        self.name = name
+
+
+library = Library()
+
+b1 = Book("Legends Of Olympus", False)
+b2 = Book("Sherlock's Homies", False)
+b3 = Book("How to See in the Dark", False)
+
+p1 = Person("Rex")
+p2 = Person("Winston")
+
+library.list_books()
+
+library.add_book(b1)
+library.add_book(b2)
+library.add_book(b3)
+
+library.add_member(p1)
+library.list_members()
+
+print("\nBooks have been supplied!")
+library.list_books()
+
+library.add_member(p2)
+library.list_members()
+
+library.borrow(b1, p1)
+library.borrow(b1, p2)
+library.borrow(b3, p2)
+
+library.list_books()
+
+library.unborrow(b1, p1)
+library.list_books()
+
+library.unborrow(b3,p2)
+library.list_books()
+
+library.unborrow(b3, p2)
