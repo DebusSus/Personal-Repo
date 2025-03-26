@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Player</title>
+</head>
+<body>
+    <h1>Register a New Player</h1>
+    <form method="POST" action="/">
+        <p>
+            Nickname: <br>
+            <input type="text" name="name" required>
+        </p>
+        <p>
+            Email: <br>
+            <input type="email" name="email" required>
+        </p>
+        <p>
+            Favourite Warframe (optional): <br>
+            <select name="fave_warframe">
+                <option value="">None</option>
+                {% for warframe in warframes %}
+                    <option value="{{ warframe }}">{{ warframe }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="Register">
+        </p>
+    </form>
+</body>
+</html>
